@@ -26,6 +26,11 @@ different versioning scheme, following the Haskell community's
   four of `ToEnum`, `FromEnum`, `ToString`, and `FromString`. (The `...Enum`
   variants return false on failure, while the `...String` variants throw.)
 
+### C# Comm ###
+* *Wire breaking change* Remove error_code from EpoxyHeaders. Get rid of
+Error.OK. Change PayloadType to EpoxyMessageType. Use a separate framelet
+type to send error data.
+
 ## 4.3.0: 2016-08-23 ##
 
 * `gbc` & compiler library: 0.5.0.0

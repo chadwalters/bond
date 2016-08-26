@@ -174,11 +174,6 @@ namespace Bond.Comm
                 throw new ArgumentNullException(nameof(err));
             }
 
-            if (err.error_code == (int)ErrorCode.OK)
-            {
-                throw new ArgumentException("Error must have a non-zero error code.", nameof(err));
-            }
-
             return FromError<TPayload>(MakeIBonded(err));
         }
 
@@ -214,11 +209,6 @@ namespace Bond.Comm
             if (err == null)
             {
                 throw new ArgumentNullException(nameof(err));
-            }
-
-            if (err.error_code == (int)ErrorCode.OK)
-            {
-                throw new ArgumentException("Error must have a non-zero error code.", nameof(err));
             }
 
             return FromError(MakeIBonded(err));

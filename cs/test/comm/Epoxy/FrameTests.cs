@@ -30,6 +30,7 @@ namespace UnitTest.Epoxy
                 new { EnumMember = FrameletType.EpoxyHeaders, ExpectedValue = 0x5248 },
                 new { EnumMember = FrameletType.LayerData, ExpectedValue = 0x594C },
                 new { EnumMember = FrameletType.PayloadData, ExpectedValue = 0x5444 },
+                new { EnumMember = FrameletType.ErrorData, ExpectedValue = 0x4552 },
                 new { EnumMember = FrameletType.ProtocolError, ExpectedValue = 0x5245 },
             };
 

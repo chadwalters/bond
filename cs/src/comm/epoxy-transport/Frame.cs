@@ -13,11 +13,12 @@ namespace Bond.Comm.Epoxy
 
     internal enum FrameletType
     {
-        EpoxyConfig = 0x4743,
-        EpoxyHeaders = 0x5248,
-        LayerData = 0x594C,
-        PayloadData = 0x5444,
-        ProtocolError = 0x5245,
+        EpoxyConfig = 0x4743,           // "GC"
+        EpoxyHeaders = 0x5248,          // "RH"
+        LayerData = 0x594C,             // "YL"
+        PayloadData = 0x5444,           // "TD"
+        ErrorData = 0x4552,             // "ER"
+        ProtocolError = 0x5245,         // "RE"
     }
 
     internal struct Framelet
@@ -30,6 +31,7 @@ namespace Bond.Comm.Epoxy
                 case FrameletType.EpoxyHeaders:
                 case FrameletType.LayerData:
                 case FrameletType.PayloadData:
+                case FrameletType.ErrorData:
                 case FrameletType.ProtocolError:
                     break;
 
@@ -52,6 +54,7 @@ namespace Bond.Comm.Epoxy
                 | value == (UInt16)FrameletType.PayloadData
                 | value == (UInt16)FrameletType.EpoxyHeaders
                 | value == (UInt16)FrameletType.EpoxyConfig
+                | value == (UInt16)FrameletType.ErrorData
                 | value == (UInt16)FrameletType.ProtocolError;
         }
 
