@@ -88,7 +88,8 @@ before_script:
 
 script:
     - mkdir build && cd build
-    - cmake ..
+    - if [ "$TRAVIS_OS_NAME" == "osx" ]; then cmake -DBOND_SKIP_CORE_TESTS=TRUE ..; fi
+    - if [ "$TRAVIS_OS_NAME" != "osx" ]; then cmake ..; fi
     - if [ "$BOND_LANG" == "cs" ]; then make --jobs 2 DESTDIR=$HOME install; fi
     - if [ "$BOND_LANG" == "cs" ]; then export BOND_COMPILER_PATH=$HOME/usr/local/bin; fi
     - if [[ $BOND_LANG == cpp* ]]; then make --jobs 2 check; fi
