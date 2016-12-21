@@ -80,6 +80,8 @@ namespace tests
                 (void)s_foo32_metadata;
                 (void)s_foo33_metadata;
             }
+
+        public: static ::bond::Metadata GetMetadata() { return metadata; };
     };
     
     template <typename Payload>

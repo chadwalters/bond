@@ -35,6 +35,7 @@ data Options
         , enum_header :: Bool
         , allocator :: Maybe String
         , apply :: [ApplyOptions]
+        , export_attribute :: Maybe String
         , apply_attribute :: Maybe String
         , jobs :: Maybe Int
         , no_banner :: Bool
@@ -71,7 +72,8 @@ cpp = Cpp
     , enum_header = def &= name "e" &= help "Generate enums into a separate header file"
     , allocator = def &= typ "ALLOCATOR" &= help "Generate types using the specified  allocator"
     , apply = def &= typ "PROTOCOL" &= help "Generate Apply function overloads for the specified protocol only; supported protocols: compact, fast and simple"
-    , apply_attribute = def &= typ "ATTRIBUTE" &= help "Prefix the declarations of Apply functions with the specified C++ attribute/declspec"
+    , export_attribute = def &= typ "ATTRIBUTE" &= help "Prefix declarations for library export with the specified C++ attribute/declspec"
+    , apply_attribute = def &= typ "ATTRIBUTE" &= help "Deprecated synonym of export_attribute option"
     , jobs = def &= opt "0" &= typ "NUM" &= name "j" &= help "Run NUM jobs simultaneously (or '$ncpus' if no NUM is not given)"
     , no_banner = def &= help "Omit the banner at the top of generated files"
     } &=

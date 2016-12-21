@@ -6,6 +6,7 @@
 import System.Environment (getArgs, withArgs)
 import System.Directory
 import System.FilePath
+import Data.Maybe
 import Data.Monoid
 import Control.Monad
 import Prelude
@@ -68,15 +69,20 @@ writeSchema _ = error "writeSchema: impossible happened."
 
 cppCodegen :: Options -> IO()
 cppCodegen options@Cpp {..} = do
+    let export_attr = if isJust export_attribute
+            then if isJust apply_attribute
+                    then error "cppCodegen: must not set both export-attribute and apply-attribute"
+                    else export_attribute
+            else apply_attribute
     let typeMapping = maybe cppTypeMapping cppCustomAllocTypeMapping allocator
     concurrentlyFor_ files $ codeGen options typeMapping $
-        [ reflection_h
-        , types_cpp
+        [ reflection_h export_attr
         , types_h header enum_header allocator
-        , apply_h applyProto apply_attribute
+        , types_cpp
+        , apply_h applyProto export_attr
         , apply_cpp applyProto
+        , comm_h export_attr
         , comm_cpp
-        , comm_h
         ] <>
         [ enum_h | enum_header]
   where

@@ -44,6 +44,8 @@ namespace tests
 
         public: typedef methods1::type methods;
         
+
+        public: static ::bond::Metadata GetMetadata() { return metadata; };
     };
     
 

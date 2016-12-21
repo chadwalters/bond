@@ -65,24 +65,41 @@ namespace tests
 
     struct Foo::Schema
     {
+        DllExport
         static const ::bond::Metadata metadata;
 
-        private: static const ::bond::Metadata s_foo11_metadata;
-        private: static const ::bond::Metadata s_foo12_metadata;
-        private: static const ::bond::Metadata s_foo13_metadata;
-        private: static const ::bond::Metadata s_foo14_metadata;
-        private: static const ::bond::Metadata s_foo21_metadata;
-        private: static const ::bond::Metadata s_foo22_metadata;
-        private: static const ::bond::Metadata s_foo23_metadata;
-        private: static const ::bond::Metadata s_foo24_metadata;
-        private: static const ::bond::Metadata s_foo31_metadata;
-        private: static const ::bond::Metadata s_foo32_metadata;
-        private: static const ::bond::Metadata s_foo33_metadata;
-        private: static const ::bond::Metadata s_foo34_metadata;
-        private: static const ::bond::Metadata s_foo41_metadata;
-        private: static const ::bond::Metadata s_foo42_metadata;
-        private: static const ::bond::Metadata s_foo43_metadata;
-        private: static const ::bond::Metadata s_foo44_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo11_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo12_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo13_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo14_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo21_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo22_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo23_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo24_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo31_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo32_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo33_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo34_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo41_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo42_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo43_metadata;
+        private: DllExport
+        static const ::bond::Metadata s_foo44_metadata;
 
         public: struct service
         {
