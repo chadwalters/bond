@@ -124,7 +124,7 @@ protected:
     boost::shared_ptr<IService>
     ConnectTo(const Address& address) override
     {
-        return _factory(true, *this, address, BaseTransport::ConnectTo(address));
+		return _factory(true, *this, address, BaseTransport::ConnectTo(address));
     }
 
 
@@ -132,10 +132,12 @@ protected:
     BindTo(const Address& address,
            const std::function<boost::shared_ptr<IService>(const Address&, ConnectionContext)>& tableFactory) override
     {
+		const WireProtocol& protocol = *this;
+		const auto& factory = _factory;
         return BaseTransport::BindTo(
             address,
-            [tableFactory, this](const Address& remoteAddress, ConnectionContext context) {
-                return _factory(false, *this, remoteAddress, tableFactory(remoteAddress, context));
+            [tableFactory, protocol, factory](const Address& remoteAddress, ConnectionContext context) {
+                return factory(false, protocol, remoteAddress, tableFactory(remoteAddress, context));
             });
     }
 
