@@ -11,7 +11,7 @@
     <DocumentationFile>$(OutDir)\$(TargetName).xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <FileToCopy Include="$(TargetDir)\$(TargetName).pdb" Condition="'$(OS)' != 'Unix'" />
+    <FileToCopy Include="$(TargetDir)\$(TargetName).pdb" Condition="'$(OS)' != 'Unix' Or '$(FrameworkVersion) >= 'v5'" />
     <FileToCopy Include="$(TargetPath).mdb" Condition="'$(OS)' == 'Unix'" />
     <FileToCopy Include="$(OutDir)\$(TargetName).xml" />
   </ItemGroup>
