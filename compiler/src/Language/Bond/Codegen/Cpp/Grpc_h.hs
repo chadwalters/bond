@@ -153,15 +153,15 @@ inline #{className}::#{proxyName}<TThreadPool>::#{proxyName}(
         serviceMethodsWithIndex :: [(Integer,Method)]
         serviceMethodsWithIndex = zip [0..] serviceMethods
 
-        publicProxyMethodDecl Function{methodInput = Nothing, ..} = [lt|void Async#{methodName}(::grpc::ClientContext* context, const std::function<void(const #{bonded methodResult}&, const ::grpc::Status&)>& cb);|]
-        publicProxyMethodDecl Function{..} = [lt|void Async#{methodName}(::grpc::ClientContext* context, const #{bonded methodInput}& request, const std::function<void(const #{bonded methodResult}&, const ::grpc::Status&)>& cb);
-        void Async#{methodName}(::grpc::ClientContext* context, const #{payload methodInput}& request, const std::function<void(const #{bonded methodResult}&, const ::grpc::Status&)>& cb)
+        publicProxyMethodDecl Function{methodInput = Nothing, ..} = [lt|void Async#{methodName}(::std::shared_ptr< ::grpc::ClientContext> context, const std::function<void(const #{bonded methodResult}&, const ::grpc::Status&)>& cb);|]
+        publicProxyMethodDecl Function{..} = [lt|void Async#{methodName}(::std::shared_ptr< ::grpc::ClientContext> context, const #{bonded methodInput}& request, const std::function<void(const #{bonded methodResult}&, const ::grpc::Status&)>& cb);
+        void Async#{methodName}(::std::shared_ptr< ::grpc::ClientContext> context, const #{payload methodInput}& request, const std::function<void(const #{bonded methodResult}&, const ::grpc::Status&)>& cb)
         {
             Async#{methodName}(context, #{bonded methodInput}{request}, cb);
         }|]
-        publicProxyMethodDecl Event{methodInput = Nothing, ..} = [lt|void Async#{methodName}(::grpc::ClientContext* context);|]
-        publicProxyMethodDecl Event{..} = [lt|void Async#{methodName}(::grpc::ClientContext* context, const #{bonded methodInput}& request);
-        void Async#{methodName}(::grpc::ClientContext* context, const #{payload methodInput}& request)
+        publicProxyMethodDecl Event{methodInput = Nothing, ..} = [lt|void Async#{methodName}(::std::shared_ptr< ::grpc::ClientContext> context);|]
+        publicProxyMethodDecl Event{..} = [lt|void Async#{methodName}(::std::shared_ptr< ::grpc::ClientContext> context, const #{bonded methodInput}& request);
+        void Async#{methodName}(::std::shared_ptr< ::grpc::ClientContext> context, const #{payload methodInput}& request)
         {
             Async#{methodName}(context, #{bonded methodInput}{request});
         }|]
@@ -174,7 +174,7 @@ inline #{className}::#{proxyName}<TThreadPool>::#{proxyName}(
 
         methodDecl Function{..} = [lt|#{template}template <typename TThreadPool>
 inline void #{className}::#{proxyName}<TThreadPool>::Async#{methodName}(
-    ::grpc::ClientContext* context,
+    ::std::shared_ptr< ::grpc::ClientContext> context,
     #{voidParam methodInput}
     const std::function<void(const #{bonded methodResult}&, const ::grpc::Status&)>& cb)
 {
@@ -183,8 +183,9 @@ inline void #{className}::#{proxyName}<TThreadPool>::Async#{methodName}(
         _channel,
         _ioManager,
         _threadPool,
+        context,
         cb);
-    calldata->dispatch(rpcmethod_#{methodName}_, context, request);
+    calldata->dispatch(rpcmethod_#{methodName}_, request);
 }|]
           where
             voidRequest Nothing = [lt|auto request = ::bond::bonded< ::bond::Void>{ ::bond::Void()};|]
@@ -194,15 +195,16 @@ inline void #{className}::#{proxyName}<TThreadPool>::Async#{methodName}(
 
         methodDecl Event{..} = [lt|#{template}template <typename TThreadPool>
 inline void #{className}::#{proxyName}<TThreadPool>::Async#{methodName}(
-    ::grpc::ClientContext* context
+    ::std::shared_ptr< ::grpc::ClientContext> context
     #{voidParam methodInput})
 {
     #{voidRequest methodInput}
     auto calldata = new ::bond::ext::gRPC::detail::client_unary_call_data< #{bonded methodInput}, #{bonded Nothing}, TThreadPool >(
         _channel,
         _ioManager,
-        _threadPool);
-    calldata->dispatch(rpcmethod_#{methodName}_, context, request);
+        _threadPool,
+        context);
+    calldata->dispatch(rpcmethod_#{methodName}_, request);
 }|]
           where
             voidRequest Nothing = [lt|auto request = ::bond::bonded< ::bond::Void>{ ::bond::Void()};|]

@@ -32,7 +32,6 @@ int main()
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
-    
     PingPong::Client client(channel, ioManager, threadPool);
 
     printf("Start client\n");
@@ -42,7 +41,7 @@ int main()
     {
         for (int i = 0; i < NumRequests; i++)
         {
-            ClientContext context;
+            auto context = std::make_shared<ClientContext>();
             PingRequest request;
 
             request.Payload = "request" + std::to_string(i);
@@ -52,7 +51,7 @@ int main()
             fflush(stdout);
 
             bond::ext::gRPC::wait_callback<PingResponse> cb;
-            client.AsyncPing(&context, bond::bonded<PingRequest>{ request }, cb);
+            client.AsyncPing(context, bond::bonded<PingRequest>{ request }, cb);
             bool gotResponse = cb.wait_for(std::chrono::seconds(1));
 
             if (!gotResponse)
@@ -83,14 +82,14 @@ int main()
 
         for (int i = 0; i < NumErrors; i++)
         {
-            ClientContext context;
+            auto context = std::make_shared<ClientContext>();
             PingRequest request;
 
             request.Payload = "error" + std::to_string(i);
             request.Action = PingAction::Error;
 
             bond::ext::gRPC::wait_callback<PingResponse> cb;
-            client.AsyncPing(&context, bond::bonded<PingRequest> { request }, cb);
+            client.AsyncPing(context, bond::bonded<PingRequest> { request }, cb);
             bool gotResponse = cb.wait_for(std::chrono::seconds(1));
 
             if (!gotResponse)

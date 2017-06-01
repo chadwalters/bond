@@ -203,8 +203,9 @@ The proxy stub can then be used to make calls to the server as follows:
     ExampleRequest request;
     // Fill in request fields here
 
+    auto context = std::make_shared<ClientContext>();
     bond::ext::gRPC::wait_callback<ExampleResponse> cb;
-    client.AsyncExampleMethod(&context, request, callback);
+    client.AsyncExampleMethod(context, request, callback);
 
     callback.wait();
     ExampleResponse response = callback.response().Deserialize();

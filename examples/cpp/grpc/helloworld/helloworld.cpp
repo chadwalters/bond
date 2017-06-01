@@ -57,7 +57,7 @@ int main()
         ioManager,
         threadPool);
 
-    ClientContext context;
+    auto context = std::make_shared<ClientContext>();
 
     const std::string user("world");
 
@@ -65,7 +65,7 @@ int main()
     request.name = user;
 
     bond::ext::gRPC::wait_callback<HelloReply> cb;
-    greeter.AsyncSayHello(&context, request, cb);
+    greeter.AsyncSayHello(context, request, cb);
 
     bool waitResult = cb.wait_for(std::chrono::seconds(10));
 

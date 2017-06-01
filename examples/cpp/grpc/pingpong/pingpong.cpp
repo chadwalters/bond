@@ -189,24 +189,24 @@ int main()
     request.name = user;
 
     {
-        ClientContext context;
+        auto context = std::make_shared<ClientContext>();
         wait_callback<PingReply> cb;
-        doublePing.AsyncPing(&context, request, cb);
+        doublePing.AsyncPing(context, request, cb);
         assertResponseReceived(cb, __LINE__);
         assertResponseContents(cb, __LINE__);
     }
 
     {
-        ClientContext context;
+        auto context = std::make_shared<ClientContext>();
         wait_callback<PingReply> cb;
-        doublePing.AsyncPingNoPayload(&context, cb);
+        doublePing.AsyncPingNoPayload(context, cb);
         assertResponseReceived(cb, __LINE__);
         assertResponseContents(cb, __LINE__);
     }
 
     {
-        ClientContext context;
-        doublePing.AsyncPingNoResponse(&context, request);
+        auto context = std::make_shared<ClientContext>();
+        doublePing.AsyncPingNoResponse(context, request);
         bool wasEventHandled = double_ping_service.pingNoResponse_event.wait_for(std::chrono::seconds(10));
 
         if (!wasEventHandled)
@@ -217,25 +217,25 @@ int main()
     }
 
     {
-        ClientContext context;
+        auto context = std::make_shared<ClientContext>();
         wait_callback<bond::Void> cb;
-        doublePing.AsyncPingVoid(&context, cb);
+        doublePing.AsyncPingVoid(context, cb);
         assertResponseReceived(cb, __LINE__);
         assertStatus(StatusCode::OK, cb.status().error_code(), __LINE__);
     }
 
     {
-        ClientContext context;
+        auto context = std::make_shared<ClientContext>();
         wait_callback<PingReply> cb;
-        doublePing.AsyncPingShouldThrow(&context, request, cb);
+        doublePing.AsyncPingShouldThrow(context, request, cb);
         assertResponseReceived(cb, __LINE__);
         assertStatus(StatusCode::CANCELLED, cb.status().error_code(), __LINE__);
     }
 
     {
-        ClientContext context;
+        auto context = std::make_shared<ClientContext>();
         wait_callback<PingReply> cb;
-        pingPong.AsyncPing(&context, request, cb);
+        pingPong.AsyncPing(context, request, cb);
         assertResponseReceived(cb, __LINE__);
         assertResponseContents(cb, __LINE__);
     }

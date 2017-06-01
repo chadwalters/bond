@@ -47,8 +47,8 @@ public:
             std::shared_ptr< ::bond::ext::gRPC::io_manager> ioManager,
             std::shared_ptr<TThreadPool> threadPool);
 
-        void Asyncfoo(::grpc::ClientContext* context, const ::bond::bonded< ::tests::Param>& request, const std::function<void(const ::bond::bonded< ::tests::Result>&, const ::grpc::Status&)>& cb);
-        void Asyncfoo(::grpc::ClientContext* context, const ::tests::Param& request, const std::function<void(const ::bond::bonded< ::tests::Result>&, const ::grpc::Status&)>& cb)
+        void Asyncfoo(::std::shared_ptr< ::grpc::ClientContext> context, const ::bond::bonded< ::tests::Param>& request, const std::function<void(const ::bond::bonded< ::tests::Result>&, const ::grpc::Status&)>& cb);
+        void Asyncfoo(::std::shared_ptr< ::grpc::ClientContext> context, const ::tests::Param& request, const std::function<void(const ::bond::bonded< ::tests::Result>&, const ::grpc::Status&)>& cb)
         {
             Asyncfoo(context, ::bond::bonded< ::tests::Param>{request}, cb);
         }
@@ -124,7 +124,7 @@ inline Foo::ClientCore<TThreadPool>::ClientCore(
 
 template <typename TThreadPool>
 inline void Foo::ClientCore<TThreadPool>::Asyncfoo(
-    ::grpc::ClientContext* context,
+    ::std::shared_ptr< ::grpc::ClientContext> context,
     const ::bond::bonded< ::tests::Param>& request,
     const std::function<void(const ::bond::bonded< ::tests::Result>&, const ::grpc::Status&)>& cb)
 {
@@ -133,8 +133,9 @@ inline void Foo::ClientCore<TThreadPool>::Asyncfoo(
         _channel,
         _ioManager,
         _threadPool,
+        context,
         cb);
-    calldata->dispatch(rpcmethod_foo_, context, request);
+    calldata->dispatch(rpcmethod_foo_, request);
 }
 
 

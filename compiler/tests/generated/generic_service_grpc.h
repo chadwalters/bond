@@ -48,16 +48,16 @@ public:
             std::shared_ptr< ::bond::ext::gRPC::io_manager> ioManager,
             std::shared_ptr<TThreadPool> threadPool);
 
-        void Asyncfoo31(::grpc::ClientContext* context, const ::bond::bonded<Payload>& request, const std::function<void(const ::bond::bonded< ::bond::Void>&, const ::grpc::Status&)>& cb);
-        void Asyncfoo31(::grpc::ClientContext* context, const Payload& request, const std::function<void(const ::bond::bonded< ::bond::Void>&, const ::grpc::Status&)>& cb)
+        void Asyncfoo31(::std::shared_ptr< ::grpc::ClientContext> context, const ::bond::bonded<Payload>& request, const std::function<void(const ::bond::bonded< ::bond::Void>&, const ::grpc::Status&)>& cb);
+        void Asyncfoo31(::std::shared_ptr< ::grpc::ClientContext> context, const Payload& request, const std::function<void(const ::bond::bonded< ::bond::Void>&, const ::grpc::Status&)>& cb)
         {
             Asyncfoo31(context, ::bond::bonded<Payload>{request}, cb);
         }
 
-        void Asyncfoo32(::grpc::ClientContext* context, const std::function<void(const ::bond::bonded<Payload>&, const ::grpc::Status&)>& cb);
+        void Asyncfoo32(::std::shared_ptr< ::grpc::ClientContext> context, const std::function<void(const ::bond::bonded<Payload>&, const ::grpc::Status&)>& cb);
 
-        void Asyncfoo33(::grpc::ClientContext* context, const ::bond::bonded<Payload>& request, const std::function<void(const ::bond::bonded<Payload>&, const ::grpc::Status&)>& cb);
-        void Asyncfoo33(::grpc::ClientContext* context, const Payload& request, const std::function<void(const ::bond::bonded<Payload>&, const ::grpc::Status&)>& cb)
+        void Asyncfoo33(::std::shared_ptr< ::grpc::ClientContext> context, const ::bond::bonded<Payload>& request, const std::function<void(const ::bond::bonded<Payload>&, const ::grpc::Status&)>& cb);
+        void Asyncfoo33(::std::shared_ptr< ::grpc::ClientContext> context, const Payload& request, const std::function<void(const ::bond::bonded<Payload>&, const ::grpc::Status&)>& cb)
         {
             Asyncfoo33(context, ::bond::bonded<Payload>{request}, cb);
         }
@@ -173,7 +173,7 @@ inline Foo<Payload>::ClientCore<TThreadPool>::ClientCore(
 template <typename Payload>
     template <typename TThreadPool>
 inline void Foo<Payload>::ClientCore<TThreadPool>::Asyncfoo31(
-    ::grpc::ClientContext* context,
+    ::std::shared_ptr< ::grpc::ClientContext> context,
     const ::bond::bonded<Payload>& request,
     const std::function<void(const ::bond::bonded< ::bond::Void>&, const ::grpc::Status&)>& cb)
 {
@@ -182,14 +182,15 @@ inline void Foo<Payload>::ClientCore<TThreadPool>::Asyncfoo31(
         _channel,
         _ioManager,
         _threadPool,
+        context,
         cb);
-    calldata->dispatch(rpcmethod_foo31_, context, request);
+    calldata->dispatch(rpcmethod_foo31_, request);
 }
 
 template <typename Payload>
     template <typename TThreadPool>
 inline void Foo<Payload>::ClientCore<TThreadPool>::Asyncfoo32(
-    ::grpc::ClientContext* context,
+    ::std::shared_ptr< ::grpc::ClientContext> context,
     
     const std::function<void(const ::bond::bonded<Payload>&, const ::grpc::Status&)>& cb)
 {
@@ -198,14 +199,15 @@ inline void Foo<Payload>::ClientCore<TThreadPool>::Asyncfoo32(
         _channel,
         _ioManager,
         _threadPool,
+        context,
         cb);
-    calldata->dispatch(rpcmethod_foo32_, context, request);
+    calldata->dispatch(rpcmethod_foo32_, request);
 }
 
 template <typename Payload>
     template <typename TThreadPool>
 inline void Foo<Payload>::ClientCore<TThreadPool>::Asyncfoo33(
-    ::grpc::ClientContext* context,
+    ::std::shared_ptr< ::grpc::ClientContext> context,
     const ::bond::bonded<Payload>& request,
     const std::function<void(const ::bond::bonded<Payload>&, const ::grpc::Status&)>& cb)
 {
@@ -214,8 +216,9 @@ inline void Foo<Payload>::ClientCore<TThreadPool>::Asyncfoo33(
         _channel,
         _ioManager,
         _threadPool,
+        context,
         cb);
-    calldata->dispatch(rpcmethod_foo33_, context, request);
+    calldata->dispatch(rpcmethod_foo33_, request);
 }
 
 
