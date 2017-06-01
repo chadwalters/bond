@@ -32,7 +32,7 @@ int main()
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
-    
+    std::vector<std::shared_ptr<ClientContext>> contexts;
     PingPong::Client client(channel, ioManager, threadPool);
 
     printf("Start client\n");
@@ -42,17 +42,18 @@ int main()
     {
         for (int i = 0; i < NumRequests; i++)
         {
-            ClientContext context;
             PingRequest request;
 
             request.Payload = "request" + std::to_string(i);
             request.Action = PingAction::Identity;
 
-            printf("Sending\n");
+            printf("Sending request\n");
             fflush(stdout);
 
             bond::ext::gRPC::wait_callback<PingResponse> cb;
-            client.AsyncPing(&context, bond::bonded<PingRequest>{ request }, cb);
+            auto context = std::make_shared<ClientContext>();
+            contexts.push_back(context);
+            client.AsyncPing(&*context, bond::bonded<PingRequest>{ request }, cb);
             bool gotResponse = cb.wait_for(std::chrono::seconds(1));
 
             if (!gotResponse)
@@ -81,16 +82,34 @@ int main()
             }
         }
 
+        for (int i = 0; i < NumEvents; i++)
+        {
+            PingRequest request;
+
+            request.Payload = "event" + std::to_string(i);
+
+            printf("Sending event\n");
+            fflush(stdout);
+
+            auto context = std::make_shared<ClientContext>();
+            contexts.push_back(context);
+            client.AsyncPingEvent(&*context, bond::bonded<PingRequest>{ request });
+        }
+
         for (int i = 0; i < NumErrors; i++)
         {
-            ClientContext context;
             PingRequest request;
 
             request.Payload = "error" + std::to_string(i);
             request.Action = PingAction::Error;
 
+            printf("Sending request\n");
+            fflush(stdout);
+
+            auto context = std::make_shared<ClientContext>();
+            contexts.push_back(context);
             bond::ext::gRPC::wait_callback<PingResponse> cb;
-            client.AsyncPing(&context, bond::bonded<PingRequest> { request }, cb);
+            client.AsyncPing(&*context, bond::bonded<PingRequest> { request }, cb);
             bool gotResponse = cb.wait_for(std::chrono::seconds(1));
 
             if (!gotResponse)
