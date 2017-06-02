@@ -41,7 +41,10 @@ endif()
 
 add_subdirectory (cpp)
 add_subfolder (doc "doc")
-add_python_subdirectory (python)
+
+if (BOND_ENABLE_PYTHON)
+  add_python_subdirectory (python)
+endif()
 add_subdirectory (examples)
 
 

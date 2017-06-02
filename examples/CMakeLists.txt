@@ -1,2 +1,5 @@
 add_subdirectory (cpp)
-add_python_subdirectory (python)
+
+if (BOND_ENABLE_PYTHON)
+  add_python_subdirectory (python)
+endif()

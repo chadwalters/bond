@@ -178,6 +178,10 @@ set (BOND_LIBRARIES_INSTALL_CPP
     "FALSE"
     CACHE BOOL "If TRUE, the generated .cpp files for the Bond libraries will be installed under src/ as part of the INSTALL target.")
 
+set (BOND_ENABLE_PYTHON
+    "TRUE"
+    CACHE BOOL "If FALSE, then do not build Python")
+
 set (BOND_ENABLE_COMM
     "TRUE"
     CACHE BOOL "If FALSE, then do not build Comm")
