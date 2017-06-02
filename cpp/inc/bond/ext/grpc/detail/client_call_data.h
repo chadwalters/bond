@@ -17,9 +17,12 @@
     #pragma warning (pop)
 #endif
 
+#include <bond/ext/grpc/client_callback.h>
 #include <bond/ext/grpc/io_manager.h>
 #include <bond/ext/grpc/detail/service.h>
 #include <bond/ext/grpc/unary_call.h>
+
+#include <bond/core/bonded.h>
 
 #include <boost/assert.hpp>
 #include <functional>
@@ -35,7 +38,7 @@ struct client_unary_call_data : io_manager_tag
 {
     /// The type of the user-defined callback that will be invoked for the
     /// response.
-    typedef std::function<void(const TResponse&, const grpc::Status&)> CallbackType;
+    typedef std::function<void(const client_callback_args<TResponse>&)> CallbackType;
 
     /// The channel to send the request on.
     std::shared_ptr<grpc::ChannelInterface> _channel;
@@ -46,12 +49,12 @@ struct client_unary_call_data : io_manager_tag
     /// The client context for this call
     std::shared_ptr<grpc::ClientContext> _context;
     /// A response reader.
-    std::unique_ptr<grpc::ClientAsyncResponseReader<TResponse>> _responseReader;
+    std::unique_ptr<grpc::ClientAsyncResponseReader<bond::bonded<TResponse>>> _responseReader;
 
     /// The user code to invoke when a response is received.
     CallbackType _cb;
     /// The response received.
-    TResponse _response;
+    bond::bonded<TResponse> _response;
     /// The status received.
     grpc::Status _status;
 
@@ -77,10 +80,10 @@ struct client_unary_call_data : io_manager_tag
 
     void dispatch(
         grpc::RpcMethod method,
-        const TRequest& request)
+        const bond::bonded<TRequest>& request)
     {
-        _responseReader = std::unique_ptr<grpc::ClientAsyncResponseReader<TResponse>>(
-            new ::grpc::ClientAsyncResponseReader<TResponse>(
+        _responseReader = std::unique_ptr<grpc::ClientAsyncResponseReader<bond::bonded<TResponse>>>(
+            new ::grpc::ClientAsyncResponseReader<bond::bonded<TResponse>>(
                 _channel.get(),
                 _ioManager->cq(),
                 method,
@@ -95,7 +98,7 @@ struct client_unary_call_data : io_manager_tag
         {
             _threadPool->schedule([this]()
             {
-                _cb(_response, _status);
+                _cb(client_callback_args<TResponse>(_response, _status, _context));
 
                 delete this;
             });

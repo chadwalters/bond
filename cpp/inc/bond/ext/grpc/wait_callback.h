@@ -5,6 +5,7 @@
 
 #include <bond/core/bonded.h>
 #include <bond/ext/grpc/exception.h>
+#include <bond/ext/grpc/client_callback.h>
 #include <grpc++/impl/codegen/status.h>
 
 #include <boost/optional.hpp>
@@ -31,16 +32,18 @@ class wait_callback final
 public:
     wait_callback() : _impl(std::make_shared<impl>()) { }
 
+    typedef client_callback_args<TResponse> callback_args;
+
     /// @brief Records the response and status.
     ///
     /// @exception MultipleInvocationException thrown if the callback (or a
     /// copy of the callback) is invoked more than once.
-    void operator()(const bond::bonded<TResponse>& response, const grpc::Status& status)
+    void operator()(const callback_args &args)
     {
         std::unique_lock<std::mutex> lock(_impl->_m);
         if (!_impl->_results)
         {
-            _impl->_results.emplace(response, status);
+            _impl->_results.emplace(args._response, args._status);
 
             // Drop the lock before notifying so we don't wake someone up to
             // then have them wait on the lock.
