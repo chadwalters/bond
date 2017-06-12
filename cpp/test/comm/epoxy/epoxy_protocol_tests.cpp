@@ -10,7 +10,7 @@
 #include "epoxy_protocol_tests_types.h"
 #include "epoxy_protocol_tests_reflection.h"
 
-#include "../../core/unit_test_framework.h"
+#include "../../inc/unit_test_framework.h"
 
 #include <bond/comm/transport/detail/epoxy_protocol.h>
 #include "epoxy_protocol_tests.h"

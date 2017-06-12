@@ -9,7 +9,7 @@
 #include <bond/ext/detail/event.h>
 
 // TODO: move unit_test_framework.h to cpp/test/inc
-#include "../core/unit_test_framework.h"
+#include "../inc/unit_test_framework.h"
 
 #include <atomic>
 #include <chrono>

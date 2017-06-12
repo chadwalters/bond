@@ -8,8 +8,7 @@
 #include <bond/comm/transport.h>
 #include <bond/comm/layers.h>
 
-// TODO: move unit_test_framework.h to cpp/test/inc
-#include "../core/unit_test_framework.h"
+#include "../inc/unit_test_framework.h"
 
 using namespace unittest::comm;
 

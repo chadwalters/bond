@@ -28,7 +28,7 @@
 #pragma warning(pop)
 #endif
 
-#include "../core/unit_test_framework.h"
+#include "../inc/unit_test_framework.h"
 #include "../logging.h"
 
 extern bool init_unit_test();

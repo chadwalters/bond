@@ -25,7 +25,7 @@
 #pragma warning(pop)
 #endif
 
-#include "../core/unit_test_framework.h"
+#include "../inc/unit_test_framework.h"
 #include "../logging.h"
 #include "test_utils_comm.h"
 

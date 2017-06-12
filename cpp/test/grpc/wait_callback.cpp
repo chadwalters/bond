@@ -1,8 +1,7 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-// TODO: move unit_test_framework.h to cpp/test/inc
-#include "../core/unit_test_framework.h"
+#include "../inc/unit_test_framework.h"
 
 #include <bond/core/bond.h>
 #include <bond/core/bond_reflection.h>

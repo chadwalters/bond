@@ -7,8 +7,7 @@
 
 #include <bond/comm/timeout.h>
 
-// TODO: move unit_test_framework.h to cpp/test/inc
-#include "../core/unit_test_framework.h"
+#include "../inc/unit_test_framework.h"
 #include "bonded_cast.h"
 #include "test_utils_comm.h"
 

@@ -15,8 +15,7 @@
 
 #include <boost/mpl/for_each.hpp>
 
-// TODO: move unit_test_framework.h to cpp/test/inc
-#include "../core/unit_test_framework.h"
+#include "../inc/unit_test_framework.h"
 #include "bonded_cast.h"
 #include "test_utils_comm.h"
 #include <boost/chrono.hpp>

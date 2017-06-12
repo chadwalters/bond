@@ -1,7 +1,7 @@
 #pragma once
 
 #include "unit_test_limits.h"
-#include "unit_test_framework.h"
+#include "..\inc\unit_test_framework.h"
 
 #include <bond/core/bond.h>
 #include <bond/core/config.h>
