@@ -85,6 +85,13 @@ BOND_NORETURN inline void NothingException()
 }
 
 
+BOND_NORETURN inline void ExcessiveAllocationException()
+{
+    BOND_THROW(CoreException,
+        "Excessive allocation");
+}
+
+
 BOND_NORETURN inline void InvalidEnumValueException(const char* value, const char* enum_)
 {
     BOND_THROW(bond::CoreException, 
