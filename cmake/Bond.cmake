@@ -8,8 +8,8 @@ include (Folders)
 #   [GRPC]
 #   [OUTPUT_DIR dir]
 #   [IMPORT_DIR dir [dir2, ...]]
-#   [OPTIONS opt [opt2 ...]])
-#   [TARGET name]
+#   [OPTIONS opt [opt2 ...]]
+#   [TARGET name])
 #
 function (add_bond_codegen)
     set (flagArgs ENUM_HEADER COMM GRPC)
@@ -81,17 +81,20 @@ endfunction()
 
 #
 # add_bond_executable (name
+#   [EXCLUDE_FROM_ALL]
 #   [schem.bond [schema2.bond]]
 #   source.cpp [source2.cpp]
 #   [COMM]
-#   [GRPC])
+#   [GRPC]
+#   [GBC_OPTIONS opt [opt2 ...]])
 #
 function (add_bond_executable target)
     set (schemas)
     set (sources)
-    set (flagArgs COMM GRPC)
-    cmake_parse_arguments (arg "${flagArgs}" "" "" ${ARGN})
-    foreach (file ${ARGV})
+    set (flagArgs EXCLUDE_FROM_ALL COMM GRPC)
+    set (multiValueArgs GBC_OPTIONS)
+    cmake_parse_arguments (arg "${flagArgs}" "" "${multiValueArgs}" ${ARGN})
+    foreach (file ${arg_UNPARSED_ARGUMENTS})
         get_filename_component (ext ${file} EXT)
         if (ext STREQUAL ".bond")
             get_filename_component (name ${file} NAME_WE)
@@ -100,6 +103,8 @@ function (add_bond_executable target)
             if (arg_COMM)
                 list (APPEND sources "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/${name}_comm.cpp")
             endif()
+        elseif (ext STREQUAL ".cpp")
+            list (APPEND sources "${file}")
         endif()
     endforeach()
     if (schemas)
@@ -110,11 +115,19 @@ function (add_bond_executable target)
         if (arg_GRPC)
             list (APPEND options GRPC)
         endif()
+        if (arg_GBC_OPTIONS)
+            list (APPEND options OPTIONS)
+            foreach (opt ${arg_GBC_OPTIONS})
+                list (APPEND options ${opt})
+            endforeach()
+        endif()
         add_bond_codegen (${schemas} ${options})
     endif()
-    list (REMOVE_ITEM ARGV COMM)
-    list (REMOVE_ITEM ARGV GRPC)
-    add_executable (${ARGV} ${sources})
+    set (exclude)
+    if (arg_EXCLUDE_FROM_ALL)
+        set (exclude EXCLUDE_FROM_ALL)
+    endif()
+    add_executable (${target} ${exclude} ${sources})
     add_target_to_folder(${target})
     target_link_libraries (${target} PRIVATE
         bond
