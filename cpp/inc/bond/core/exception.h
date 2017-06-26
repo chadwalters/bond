@@ -55,11 +55,25 @@ BOND_NORETURN inline void MergerContainerException(uint32_t payload, uint32_t ob
 }
 
 
+BOND_NORETURN inline void InvalidKeyTypeException(void)
+{
+    BOND_THROW(CoreException,
+        "Map key type not valid");
+}
+
+
+BOND_NORETURN inline void ElementNotFoundException(void)
+{
+    BOND_THROW(CoreException,
+        "Map element not found");
+}
+
+
 template <typename Key>
 BOND_NORETURN inline void ElementNotFoundException(const Key& key)
 {
     BOND_THROW(CoreException,
-          "Map element not found: key: " << key);
+        "Map element not found: key: " << key);
 }
 
 
@@ -110,6 +124,12 @@ BOND_NORETURN inline void RapidJsonException(const char* error, size_t offset)
 {
     BOND_THROW(CoreException,
         "JSON parser error: " << error << " at offset " << offset);
+}
+
+BOND_NORETURN inline void UnicodeConversionException(void)
+{
+    BOND_THROW(CoreException,
+        "Unicode conversion excpetion");
 }
 
  
