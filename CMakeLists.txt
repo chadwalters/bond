@@ -43,6 +43,7 @@ add_subdirectory (cpp)
 add_subfolder (doc "doc")
 add_python_subdirectory (python)
 add_subdirectory (examples)
+add_subdirectory (tools)
 
 
 install (DIRECTORY

@@ -182,6 +182,10 @@ set (BOND_ENABLE_COMM
     "TRUE"
     CACHE BOOL "If FALSE, then do not build Comm")
 
+set (BOND_ENABLE_FUZZ
+    "TRUE"
+    CACHE BOOL "If FALSE, then do not build Fuzz test tools")
+
 set (BOND_SKIP_GBC_TESTS
     "FALSE"
     CACHE BOOL "If TRUE, then skip gbc tests")
