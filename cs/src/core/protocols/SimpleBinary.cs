@@ -101,7 +101,7 @@ namespace Bond.Protocols
 
         #region Complex Types
 
-        #region Unused in tagged protocol
+        #region Unused in untagged protocol
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteFieldBegin(BondDataType type, ushort id, Metadata metadata) { }
 

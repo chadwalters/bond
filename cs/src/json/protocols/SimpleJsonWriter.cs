@@ -14,14 +14,18 @@ namespace Bond.Protocols
         public const string NameAttribute = "JsonName";
         readonly JsonTextWriter writer;
 
+        public bool OmitDefaultFields { get; set; }
+
         public SimpleJsonWriter(TextWriter writer)
         {
             this.writer = new JsonTextWriter(writer);
+            OmitDefaultFields = true;
         }
 
         public SimpleJsonWriter(Stream stream)
         {
             writer = new JsonTextWriter(new StreamWriter(stream));
+            OmitDefaultFields = true;
         }
 
         public void Flush()
@@ -71,7 +75,67 @@ namespace Bond.Protocols
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteFieldOmitted(BondDataType type, ushort id, Metadata metadata)
-        {}
+        {
+            if (!OmitDefaultFields)
+            {
+                Audit.ArgRule(!metadata.default_value.nothing, "Field set to nothing can't be serialized.");
+
+                WriteFieldBegin(type, id, metadata);
+
+                switch (type)
+                {
+                    case BondDataType.BT_BOOL:
+                        WriteBool(0 != metadata.default_value.uint_value);
+                        break;
+                    case BondDataType.BT_UINT8:
+                        WriteUInt8((byte)metadata.default_value.uint_value);
+                        break;
+                    case BondDataType.BT_UINT16:
+                        WriteUInt16((UInt16)metadata.default_value.uint_value);
+                        break;
+                    case BondDataType.BT_UINT32:
+                        WriteUInt32((UInt32)metadata.default_value.uint_value);
+                        break;
+                    case BondDataType.BT_UINT64:
+                        WriteUInt64(metadata.default_value.uint_value);
+                        break;
+                    case BondDataType.BT_FLOAT:
+                        WriteFloat((float)metadata.default_value.double_value);
+                        break;
+                    case BondDataType.BT_DOUBLE:
+                        WriteDouble(metadata.default_value.double_value);
+                        break;
+                    case BondDataType.BT_STRING:
+                        WriteString(metadata.default_value.string_value);
+                        break;
+                    case BondDataType.BT_LIST:
+                    case BondDataType.BT_SET:
+                    case BondDataType.BT_MAP:
+                        WriteContainerBegin(0, type);
+                        break;
+                    case BondDataType.BT_INT8:
+                        WriteInt8((sbyte)metadata.default_value.int_value);
+                        break;
+                    case BondDataType.BT_INT16:
+                        WriteInt16((Int16)metadata.default_value.int_value);
+                        break;
+                    case BondDataType.BT_INT32:
+                        WriteInt32((Int32)metadata.default_value.int_value);
+                        break;
+                    case BondDataType.BT_INT64:
+                        WriteInt64(metadata.default_value.int_value);
+                        break;
+                    case BondDataType.BT_WSTRING:
+                        WriteWString(metadata.default_value.wstring_value);
+                        break;
+                    default:
+                        Throw.InvalidBondDataType(type);
+                        break;
+                }
+
+                WriteFieldEnd();
+            }
+        }
 
         #endregion
 
